@@ -27,11 +27,11 @@ public class FlipkartProductPriceSearch extends Downloader
 	public void onReceive(Object message) throws Exception
 	{
 		driver = new FirefoxDriver();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		if (message instanceof Download)
 		{
 			long start = System.currentTimeMillis();
 			String product = ((Download) message).getProductName();
-			String url = "FK";
 
 			try
 			{
@@ -40,20 +40,16 @@ public class FlipkartProductPriceSearch extends Downloader
 				driver.findElement(By.id("fk-top-search-box")).clear();
 				driver.findElement(By.id("fk-top-search-box")).sendKeys(product);
 				driver.findElement(By.xpath("//input[@value='Search']")).click();
-
+				
 				By productListXpath = By.xpath("//div[@id='products']/div/div[@class='gd-col gu4']");
 				By productListXpath1 = By.xpath("//div[@id='products']/div/div[@class='gd-col gu3']");
-				if (isListElementPresent(productListXpath))
-				{
-					webelements = driver.findElements(productListXpath);
-				}
-				if (webelements.size()==0 && isListElementPresent(productListXpath1))
+				//if ()
+				//{
+				webelements = driver.findElements(productListXpath);
+				///}
+				if (webelements.size()==0)
 				{
 					webelements = driver.findElements(productListXpath1);
-				}
-				else
-				{
-					throw new Exception("NO PRODUCT LIST AVAILABLE FOR THIS PATH");
 				}
 
 				By titleXpath = By.xpath("div/div/div[1]");

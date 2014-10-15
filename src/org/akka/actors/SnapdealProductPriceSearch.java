@@ -1,5 +1,7 @@
 package org.akka.actors;
 
+import java.util.concurrent.TimeUnit;
+
 import org.akka.messages.Download;
 import org.akka.messages.ProcessingCompleted;
 import org.openqa.selenium.By;
@@ -15,6 +17,8 @@ public class SnapdealProductPriceSearch extends Downloader
 	public void onReceive(Object message) throws Exception
 	{
 		driver = new FirefoxDriver();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
 		if (message instanceof Download)
 		{
 			long start = System.currentTimeMillis();
@@ -25,6 +29,7 @@ public class SnapdealProductPriceSearch extends Downloader
 				driver.findElement(By.id("keyword")).clear();
 				driver.findElement(By.id("keyword")).sendKeys(product);
 				driver.findElement(By.id("searchBtn")).click();
+				
 				By productListXpath = By.xpath("//div[@id='products-main4']/div/div/div[@class='product_grid_box']/div[@class='productWrapper']");
 				//By productListXpath = By.xpath("//div[@id='products-main4']/div/div/div[@class='product_grid_box']/div[@class='productWrapper']");
 				if (isListElementPresent(productListXpath))

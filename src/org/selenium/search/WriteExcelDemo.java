@@ -68,7 +68,7 @@ public class WriteExcelDemo
 		try
 		{
 			// Write the workbook in file system
-			FileOutputStream out = new FileOutputStream(new File("c:/test/productprice/test1.xlsx"));
+			FileOutputStream out = new FileOutputStream(new File("c:/test/demo"+System.currentTimeMillis()+".xlsx"));
 			workbook.write(out);
 			out.close();
 			System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");

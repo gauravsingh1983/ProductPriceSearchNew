@@ -1,5 +1,7 @@
 package org.akka.actors;
 
+import java.util.concurrent.TimeUnit;
+
 import org.akka.actors.FirefoxActor;
 import org.akka.messages.Download;
 import org.akka.messages.ProcessingCompleted;
@@ -25,6 +27,7 @@ public class AmazonProductPriceSearch extends Downloader
 			driver.findElement(By.id("twotabsearchtextbox")).clear();
 			driver.findElement(By.id("twotabsearchtextbox")).sendKeys(product);
 			driver.findElement(By.cssSelector("input.nav-submit-input")).click();
+			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			webelements = driver.findElements(By.xpath("//div[@id='atfResults']/div"));
 			// System.out.println("total web elements" + webelements.size());
 			if (webelements.size() != 0)

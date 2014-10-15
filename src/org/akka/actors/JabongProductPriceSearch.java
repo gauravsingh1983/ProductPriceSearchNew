@@ -27,6 +27,7 @@ public class JabongProductPriceSearch extends Downloader
 	public void onReceive(Object message) throws Exception
 	{
 		driver = new FirefoxDriver();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		if (message instanceof Download)
 		{
 			long start = System.currentTimeMillis();
@@ -38,6 +39,7 @@ public class JabongProductPriceSearch extends Downloader
 				driver.findElement(By.id("searchInput")).clear();
 				driver.findElement(By.id("searchInput")).sendKeys(product);
 				driver.findElement(By.id("qa-searchBtn")).click();
+				
 				webelements = driver.findElements(By.xpath("//ul[@id='productsCatalog']/li"));
 				
 				By titleXpath = By.xpath("a/span[3]");
