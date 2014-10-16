@@ -24,7 +24,7 @@ public abstract class FirefoxActor extends UntypedActor
 	protected List<WebElement>			webelements			= null;
 	protected WebElement				element				= null;
 	protected List<String>				elements			= null;
-	protected List<ProductDetails>		productList			= new ArrayList<ProductDetails>();
+	//protected List<ProductDetails>		productList			= new ArrayList<ProductDetails>();
 	protected Map<String, List<String>>	allProductsPricesStr	= new HashMap<String, List<String>>();
 	protected ProductDetails			details				= null;
 

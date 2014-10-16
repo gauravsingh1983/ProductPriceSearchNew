@@ -1,5 +1,7 @@
 package org.akka.actors;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.akka.messages.Download;
@@ -16,6 +18,7 @@ public class SnapdealProductPriceSearch extends Downloader
 	@Override
 	public void onReceive(Object message) throws Exception
 	{
+		List<ProductDetails>		productList			= new ArrayList<ProductDetails>();
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		

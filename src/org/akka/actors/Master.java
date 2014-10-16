@@ -31,7 +31,7 @@ public class Master extends UntypedActor
 	//private static String[]					products = {"BURBERRY TOUCH EDP 100ML","NINA RICCI NINA EDT 80ML","NINA RICCI NINA 50ML edt","Ricci Ricci by Nina Ricci Edp 50 ml. Women"};
 	private static String[]					products = {"NINA RICCI","BURBERRY TOUCH","Carolina Herrera","Azzaro Visit"};
 	//private static String[]					products = {"canon 1200D"};
-	
+	String[] productList = WriteExcelDemo.readXLS();
 	private long startTime;
 	private long endTime;
 	
@@ -73,7 +73,7 @@ public class Master extends UntypedActor
 
 		//Monitor mon = MonitorFactory.start("This is gaurav Test!!");
 
-		int downloadWorkersCount = products.length;
+		int downloadWorkersCount = 2;//products.length;
 
 		Config config = ConfigFactory.load();
 		ActorSystem system = ActorSystem.create("TestSystem", config);

@@ -26,6 +26,7 @@ public class JabongProductPriceSearch extends Downloader
 	@Override
 	public void onReceive(Object message) throws Exception
 	{
+		List<ProductDetails>		productList			= new ArrayList<ProductDetails>();
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		if (message instanceof Download)

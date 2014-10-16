@@ -1,9 +1,13 @@
 package org.selenium.search;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,9 +24,64 @@ public class WriteExcelDemo
 {
 	public static void main(String[] args)
 	{
-		WriteExcelDemo.writeToXLS(null);
+		//WriteExcelDemo.writeToXLS(null);
+		String[] brandList = readXLS();
+		for(String str: brandList)
+		{
+			System.out.println(str);
+		}
 	}
 	
+	public static String[] readXLS()
+	{
+		List<String> brandList = new ArrayList<String>();
+		try {
+		     
+		    FileInputStream file = new FileInputStream(new File("C:\\test\\Brands.xlsx"));
+		     
+		    //Get the workbook instance for XLS file 
+		    XSSFWorkbook workbook = new XSSFWorkbook(file);
+		 
+		    //Get first sheet from the workbook
+		    XSSFSheet sheet = workbook.getSheetAt(0);
+		     
+		    //Iterate through each rows from first sheet
+		    Iterator<Row> rowIterator = sheet.iterator();
+		    while(rowIterator.hasNext()) {
+		        Row row = rowIterator.next();
+		         
+		        //For each row, iterate through each columns
+		        Iterator<Cell> cellIterator = row.cellIterator();
+		        while(cellIterator.hasNext()) {
+		             
+		            Cell cell = cellIterator.next();
+		             
+		            switch(cell.getCellType()) {
+		                case Cell.CELL_TYPE_BOOLEAN:
+		                    System.out.print(cell.getBooleanCellValue() + "\t\t");
+		                    break;
+		                case Cell.CELL_TYPE_NUMERIC:
+		                    System.out.print(cell.getNumericCellValue() + "\t\t");
+		                    break;
+		                case Cell.CELL_TYPE_STRING:
+		                    //System.out.print(cell.getStringCellValue() + "\t\t");
+		                    brandList.add(cell.getStringCellValue());
+		                    break;
+		            }
+		        }
+		        System.out.println("");
+		    }
+		    file.close();
+		     
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+		String[] arr = new String[brandList.size()];
+		arr = brandList.toArray(arr);
+		return  arr;
+	}
 
 	public static void writeToXLS(Map<String, List<ProductDetails>> productPricesData)
 	{
