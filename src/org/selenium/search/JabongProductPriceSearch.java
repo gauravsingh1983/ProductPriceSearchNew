@@ -62,7 +62,7 @@ public class JabongProductPriceSearch extends ProductPriceSearch
 
 
 		FirefoxActor.allProductsPrices.put(url+product, productList);
-		this.writeToFile(productList, "c:/test/productprice/jabong.txt");
+		//this.writeToFile(productList, "c:/test/productprice/jabong.txt");
 		
 		//long end = System.currentTimeMillis();
 		//System.out.println("Total product:" + productList.size());

@@ -1,14 +1,33 @@
 package org.akka.actors;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import org.akka.messages.Download;
 import org.akka.messages.ProcessingCompleted;
 import org.akka.messages.Start;
 import org.search.entity.ProductDetails;
-import org.selenium.search.WriteExcelDemo;
+import org.search.util.WriteExcelDemo;
+
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -21,6 +40,11 @@ import com.typesafe.config.ConfigFactory;
 
 public class Master extends UntypedActor
 {
+	
+	private static JCheckBox check = null;
+	private static JPanel panel = null;
+	private static File productFile = null;
+	private static final JCheckBox[] checkBoxes = {new JCheckBox("FK"),new JCheckBox("SD"),new JCheckBox("JB"),new JCheckBox("AZ")} ;
 
 	private ActorRef			downloaderRouterAZ	= null;
 	private ActorRef			downloaderRouterFK	= null;
@@ -29,9 +53,9 @@ public class Master extends UntypedActor
 	//String[]					products = { "moto g", "moto x", "moto e", "lg g3", "sony xperia z3", "xiomi mi3" };
 	private static String[]					urls = {"http://www.flipkart.com/", "http://www.jabong.com/"};
 	//private static String[]					products = {"BURBERRY TOUCH EDP 100ML","NINA RICCI NINA EDT 80ML","NINA RICCI NINA 50ML edt","Ricci Ricci by Nina Ricci Edp 50 ml. Women"};
-	private static String[]					products = {"NINA RICCI","BURBERRY TOUCH","Carolina Herrera","Azzaro Visit"};
+	//private static String[]					products = {"NINA RICCI","BURBERRY TOUCH","Carolina Herrera","Azzaro Visit"};
 	//private static String[]					products = {"canon 1200D"};
-	String[] productList = WriteExcelDemo.readXLS();
+	String[] products = WriteExcelDemo.readXLS(productFile);
 	private long startTime;
 	private long endTime;
 	
@@ -52,6 +76,7 @@ public class Master extends UntypedActor
 		//this.downloaderRouterAZ = downloaderRouterAZ;
 		this.downloaderRouterSD = downloaderRouterSD;
 	}
+	
 
 	private void start()
 	{
@@ -71,8 +96,9 @@ public class Master extends UntypedActor
 	public static void main(String[] args)
 	{
 
+		init();
 		//Monitor mon = MonitorFactory.start("This is gaurav Test!!");
-
+		/*
 		int downloadWorkersCount = 2;//products.length;
 
 		Config config = ConfigFactory.load();
@@ -88,10 +114,12 @@ public class Master extends UntypedActor
 		//ActorRef master = system.actorOf(Props.create(Master.class, downloaderRouterFK), "master");
 		ActorRef master = system.actorOf(Props.create(Master.class, downloaderRouterFK,downloaderRouterJB, downloaderRouterSD), "master");
 		master.tell(new Start(), master);
-
+		 */
 		//mon.stop();
 
 	}
+	
+	
 
 	@Override
 	public void onReceive(Object message) throws Exception
@@ -123,5 +151,77 @@ public class Master extends UntypedActor
 		}
 
 	}
+	
+	
+	private static void init()
+	{
+	    JFrame frame = new JFrame("BANG BANG");
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    panel = new JPanel(new GridLayout(0, 1));
+	    Border border = BorderFactory.createTitledBorder("Portal to Search");
+	    panel.setBorder(border);
+	    for(JCheckBox check: checkBoxes)
+	    {
+	    	panel.add(check);
+	    }
+
+	    JButton button = new JButton("Submit");
+	    JButton btnOpen = new JButton("OpenFile");
+	    final JLabel  fileLabel = new JLabel();
+	    Container contentPane = frame.getContentPane();
+	   
+		JPanel buttons = new JPanel();
+		BoxLayout layout2 = new BoxLayout(buttons, BoxLayout.Y_AXIS);
+		buttons.setLayout(layout2);
+		buttons.add(btnOpen);
+		buttons.add(fileLabel);
+	    btnOpen.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+
+			    JFileChooser fileopen = new JFileChooser();
+			    int ret = fileopen.showDialog(null, "Open file");
+
+			    if (ret == JFileChooser.APPROVE_OPTION) {
+			      productFile = fileopen.getSelectedFile();
+			      fileLabel.setText("Product list from file "+productFile.getName()+ " Loaded for search !!");
+			    }
+				
+			}
+		});
+	    
+	    
+	    JPanel allContent = new JPanel(new GridLayout(2, 1));
+	    allContent.add(buttons);
+	    allContent.add(panel);
+	    
+	    contentPane.add(allContent, BorderLayout.CENTER);
+	    contentPane.add(button, BorderLayout.SOUTH);
+	    
+	    frame.setSize(300, 200);
+	    frame.setVisible(true);
+	    button.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				for(Component comp : panel.getComponents())
+				{
+					if(comp instanceof JCheckBox)
+					{
+						check = (JCheckBox)comp;
+						System.out.println(check.isSelected()?check.getText():"");
+					}
+				}
+				
+			}
+		});
+	  
+	}
+
 
 }

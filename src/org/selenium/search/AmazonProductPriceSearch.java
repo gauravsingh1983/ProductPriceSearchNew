@@ -69,7 +69,7 @@ public class AmazonProductPriceSearch extends ProductPriceSearch
 			System.out.println("No products to view");
 		}
 
-		this.writeToFile(productList, "c:/test/productprice/amazon.txt");
+		//this.writeToFile(productList, "c:/test/productprice/amazon.txt");
 		
 		FirefoxActor.allProductsPrices.put(url+product, productList);
 		

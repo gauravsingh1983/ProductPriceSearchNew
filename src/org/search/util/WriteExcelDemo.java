@@ -1,4 +1,4 @@
-package org.selenium.search;
+package org.search.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,25 +25,26 @@ public class WriteExcelDemo
 	public static void main(String[] args)
 	{
 		//WriteExcelDemo.writeToXLS(null);
-		String[] brandList = readXLS();
+		File file = new File("");
+		String[] brandList = readXLS(file);
+		System.out.println(brandList.length);
 		for(String str: brandList)
 		{
 			System.out.println(str);
 		}
 	}
 	
-	public static String[] readXLS()
+	public static String[] readXLS(File productFile)
 	{
 		List<String> brandList = new ArrayList<String>();
 		try {
-		     
-		    FileInputStream file = new FileInputStream(new File("C:\\test\\Brands.xlsx"));
-		     
+			//FileInputStream file = new FileInputStream(new File("C:\\test\\productprice\\Brands.xlsx"));
+			FileInputStream file = new FileInputStream(productFile);
 		    //Get the workbook instance for XLS file 
 		    XSSFWorkbook workbook = new XSSFWorkbook(file);
 		 
 		    //Get first sheet from the workbook
-		    XSSFSheet sheet = workbook.getSheetAt(0);
+		    XSSFSheet sheet = workbook.getSheetAt(1);
 		     
 		    //Iterate through each rows from first sheet
 		    Iterator<Row> rowIterator = sheet.iterator();
@@ -127,10 +128,10 @@ public class WriteExcelDemo
 		try
 		{
 			// Write the workbook in file system
-			FileOutputStream out = new FileOutputStream(new File("c:/test/productprice/demo"+System.currentTimeMillis()+".xlsx"));
+			FileOutputStream out = new FileOutputStream(new File("C:\\test\\productprice\\demo"+System.currentTimeMillis()+".xlsx"));
 			workbook.write(out);
 			out.close();
-			System.out.println("productprice.xlsx successfully saved");
+			System.out.println("productprice_demo.xlsx written successfully on disk.");
 		}
 		catch (Exception e)
 		{

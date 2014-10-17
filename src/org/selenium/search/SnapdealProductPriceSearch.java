@@ -63,7 +63,7 @@ public class SnapdealProductPriceSearch extends ProductPriceSearch
 
 		
 		FirefoxActor.allProductsPrices.put(url+product, productList);
-		this.writeToFile(productList, "c:/test/productprice/snapdeal.txt");
+		//this.writeToFile(productList, "c:/test/productprice/snapdeal.txt");
 		
 		//long end = System.currentTimeMillis();
 		//System.out.println("Total product:" + productList.size());

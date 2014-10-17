@@ -41,19 +41,5 @@ public abstract class ProductPriceSearch implements Search
 
 	public abstract void setWebDriver(WebDriver webDriver);
 
-	public void writeToFile(List<ProductDetails> productList, String fileLocation) throws FileNotFoundException
-	{
-		StringBuffer sbf = new StringBuffer();
-
-		for (ProductDetails pd : productList)
-		{
-			sbf.append(pd.toString() + "\n");
-		}
-
-		try (PrintStream out = new PrintStream(new FileOutputStream(fileLocation)))
-		{
-			out.print(sbf.toString());
-		}
-
-	}
+	
 }

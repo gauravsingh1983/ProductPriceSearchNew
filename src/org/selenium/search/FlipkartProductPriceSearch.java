@@ -56,7 +56,7 @@ public class FlipkartProductPriceSearch extends ProductPriceSearch
 		}
 
 		FirefoxActor.allProductsPrices.put(url+product, productList);
-		this.writeToFile(productList, "c:/test/productprice/flipkart.txt");
+		//this.writeToFile(productList, "c:/test/productprice/flipkart.txt");
 
 				
 		//long end = System.currentTimeMillis();
