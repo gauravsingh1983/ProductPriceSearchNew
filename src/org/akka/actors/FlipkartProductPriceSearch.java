@@ -89,6 +89,7 @@ public class FlipkartProductPriceSearch extends Downloader
 			System.out.println("Total product found ->" + productList.size());
 		}
 		getSender().tell(new ProcessingCompleted(++counter, FirefoxActor.allProductsPrices), getSelf());
+		//getSender().tell(new ProcessingCompleted(), getSelf());//this is test function
 		driver.close();
 	}
 

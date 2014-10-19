@@ -18,6 +18,11 @@ public class ProcessingCompleted
 	{
 		return count;
 	}
+	
+	public ProcessingCompleted()
+	{
+		
+	}
 
 	public ProcessingCompleted(int count, Map<String, List<ProductDetails>> allProductsPrices)
 	{
