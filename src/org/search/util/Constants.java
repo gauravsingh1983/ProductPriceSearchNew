@@ -9,6 +9,7 @@ public interface Constants
 	public static final String	FLIPKART_KEY_PREFIX	= "FK-";
 	public static final String	JABONG_KEY_PREFIX	= "JB-";
 	public static final String	AMAZON_KEY_PREFIX	= "AZ-";
+	public static final String	SHOPPERS_KEY_PREFIX	= "SS-";
 
 	public static final String	SD_PRD_TITLE_XPATH	= "";
 	public static final String	SD_PRD_PRICE_XPATH	= "";

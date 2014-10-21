@@ -24,14 +24,37 @@ public class WriteExcelDemo
 {
 	public static void main(String[] args)
 	{
-		//WriteExcelDemo.writeToXLS(null);
-		File file = new File("");
-		String[] brandList = readXLS(file);
-		System.out.println(brandList.length);
-		for(String str: brandList)
+
+		String[][] a = allProductPricesToArray(getSampleData());
+		for(String[] s:a)
 		{
-			System.out.println(str);
+			for(String str:s)
+			{
+				System.out.println(str);
+			}
 		}
+	}
+	
+	
+	public static String[][] allProductPricesToArray(Map<String, List<ProductDetails>> allProductsPrices)
+	{
+		//allProductsPrices = getSampleData();
+		List<ProductDetails> allProductDetails = new ArrayList<ProductDetails>();
+		for(Map.Entry<String, List<ProductDetails>> e: allProductsPrices.entrySet())
+		{
+			
+			allProductDetails.addAll((List<ProductDetails>)e.getValue());
+		}
+		
+		String[][] allProductPricesArr = new String[allProductDetails.size()][4];
+		for(int i = 0; i< allProductDetails.size(); i++)
+		{
+			allProductPricesArr[i][0] = allProductDetails.get(i).getProductTitle();
+			allProductPricesArr[i][1] = allProductDetails.get(i).getProductPrice();
+			allProductPricesArr[i][2] = allProductDetails.get(i).getProductMrp();
+			allProductPricesArr[i][3] = allProductDetails.get(i).getProductDiscount();
+		}
+		return allProductPricesArr;
 	}
 	
 	public static String[] readXLS(File productFile)

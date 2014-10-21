@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -49,7 +51,7 @@ public class Master extends UntypedActor
 	private static JCheckBox							check				= null;
 	private static File									productFile			= null;
 	private static final JCheckBox[]					checkBoxes			= { new JCheckBox("FK"), new JCheckBox("SD"), new JCheckBox("JB"),
-			new JCheckBox("AZ")											};
+			new JCheckBox("AZ")	, new JCheckBox("SS")											};
 	private static List<ActorRef>						actorList			= null;
 	private static String[]								urls				= null;
 	private static JRadioButton[]						radioButtons		= { new JRadioButton("2 GB"), new JRadioButton("4 GB"),
@@ -101,6 +103,9 @@ public class Master extends UntypedActor
 			if ("JB".equals(url))
 				downloaderRouter = system
 						.actorOf(new RoundRobinPool(workers).props(Props.create(JabongProductPriceSearch.class)), "downloadRouterJB");
+			if("SS".equals(url))
+				downloaderRouter = system
+				.actorOf(new RoundRobinPool(workers).props(Props.create(ShoppersStopProductPriceSearch.class)), "downloadRouterSS");
 
 			actorList.add(downloaderRouter);
 		}
@@ -124,27 +129,34 @@ public class Master extends UntypedActor
 		}
 		else if (message instanceof ProcessingCompleted)
 		{
-			//int cntr = ((ProcessingCompleted) message).getCount();
-			//System.out.println("Counter val :" + cntr);
+			int cntr = ((ProcessingCompleted) message).getCount();
+			System.out.println("Counter val :" + cntr);
 
-			//if (cntr == products.length * actorList.size())
-			//{
-				/*allProductsPrices = ((ProcessingCompleted) message).getAllProductsPrices();
-				System.out.println(allProductsPrices);
-				// WriteExcelDemo.writeToXLS(allProductsPrices);
+			if (cntr == products.length * actorList.size())
+			{
+				allProductsPrices = ((ProcessingCompleted) message).getAllProductsPrices();
+				System.out.println("Total items: "+getTotalProductListSize(allProductsPrices));
+				
+				if(getTotalProductListSize(allProductsPrices)>100)
+				{
+					WriteExcelDemo.writeToXLS(allProductsPrices);
+					shutdown();
+				}
+				else
+				{
+					Object rowData[][] = WriteExcelDemo.allProductPricesToArray(allProductsPrices);
+					Object columnNames[] = { "TITLE", "PRICE", "MRP", "DISCOUNT" };
+					JTable table = new JTable(rowData, columnNames);
+					JScrollPane scrollPane = new JScrollPane(table);
+					frame.add(scrollPane, BorderLayout.CENTER);
+					frame.setVisible(true);
+					
+				}
 				shutdown();
 				endTime = System.currentTimeMillis();
 				System.out.println("Total time taken to extract data:" + (endTime - startTime));
-				System.out.println("\nTotal time taken : " + TimeUnit.MILLISECONDS.toMinutes(endTime - startTime) + " minutes");*/
-
-				Object rowData[][] = WriteExcelDemo.allProductPricesToArray(allProductsPrices);
-				Object columnNames[] = { "TITLE", "PRICE", "MRP", "DISCOUNT" };
-				JTable table = new JTable(rowData, columnNames);
-				JScrollPane scrollPane = new JScrollPane(table);
-				frame.add(scrollPane, BorderLayout.CENTER);
-				frame.setVisible(true);
-				// System.exit(1);
-		//	}
+				System.out.println("\nTotal time taken : " + TimeUnit.MILLISECONDS.toMinutes(endTime - startTime) + " minutes");
+			}
 
 		}
 
@@ -161,6 +173,20 @@ public class Master extends UntypedActor
 			}
 		}
 		return null;
+	}
+	
+	
+	private static int getTotalProductListSize(Map<String, List<ProductDetails>> allProductsPrices)
+	{
+		//allProductsPrices = getSampleData();
+		List<ProductDetails> allProductDetails = new ArrayList<ProductDetails>();
+		for(Map.Entry<String, List<ProductDetails>> e: allProductsPrices.entrySet())
+		{
+			
+			allProductDetails.addAll((List<ProductDetails>)e.getValue());
+		}
+		
+		return allProductDetails.size();
 	}
 
 	private static void init()
